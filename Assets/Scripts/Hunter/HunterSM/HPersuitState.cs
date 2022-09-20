@@ -33,19 +33,17 @@ public class HPersuitState : IState
 
         if (_hunter.GetTarget()!=null)
         {
-            Persuit(_hunter.GetTarget());
-        }
-        else
-        {
-            foreach (var boid in GameManager.Instance.GetAllBoids())
+            AddForce(Persuit(_hunter.GetTarget()));
+
+            if (Vector3.Distance(_hunter.GetTarget().transform.position, _hunter.transform.position) > _hunterView)
             {
-                if (Vector3.Distance(boid.transform.position, _hunter.transform.position) >= _hunterView)
-                {
                     _hunter.SetTarget(null);
                     _hunterSM.ChangeState(HunterState.HunterPatrol);
-                }
             }
         }
+
+        _hunter.transform.position +=_hunterVelocity * Time.deltaTime;
+        _hunter.transform.forward = _hunterVelocity;
     }
 
     public void OnExit()
