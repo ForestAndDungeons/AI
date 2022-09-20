@@ -37,6 +37,7 @@ public class BoidAlignment
                 }
             }
         }
+
         if (count == 0) return desired;
 
         desired /= count;
