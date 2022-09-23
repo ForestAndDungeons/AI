@@ -94,6 +94,11 @@ public class GameManager : MonoBehaviour
         if (!_allBoids.Contains(b))
             _allBoids.Add(b);
     }
+    public void RemoveBoid(Boid b)
+    {
+        if (_allBoids.Contains(b))
+            _allBoids.Remove(b);
+    }
     public void RemoveFood(GameObject f)
     {
         if (_allFood.Contains(f))
