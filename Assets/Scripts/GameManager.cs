@@ -7,13 +7,20 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return _instance; } }
     static GameManager _instance;
 
-    [Header("Boids")]
+    [Header("Entities")]
     List<Boid> _allBoids = new List<Boid>();
+    [SerializeField] Hunter _hunter;
 
     [Header("Bounds")]
     [SerializeField] float _boundWidth;
     [SerializeField] float _boundHeight;
     [SerializeField] Color _color;
+
+    [Header("Food")]
+    List<GameObject> _allFood = new List<GameObject>();
+    float _foodTimer;
+    [SerializeField] float _foodSpawnTime;
+    [SerializeField] GameObject _foodPrefab;
 
     //Player playerReference;
 
@@ -27,6 +34,17 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
+        }
+    }
+
+    void Update()
+    {
+        _foodTimer -= Time.deltaTime;
+
+        if(_foodTimer <= 0.0f)
+        {
+            SpawnFood();
+            _foodTimer = _foodSpawnTime;
         }
     }
 
@@ -44,7 +62,15 @@ public class GameManager : MonoBehaviour
 
         return objectPosition;
     }
+    void SpawnFood()
+    {
+        GameObject food = Instantiate(_foodPrefab);
 
+        Vector3 pos = new Vector3(Random.Range(-_boundWidth, _boundWidth), 0, Random.Range(-_boundHeight, _boundHeight));
+
+        food.transform.position = pos;
+        _allFood.Add(food);
+    }
     void OnDrawGizmos()
     {
         Gizmos.color = _color;
@@ -60,13 +86,17 @@ public class GameManager : MonoBehaviour
         Gizmos.DrawLine(botLeft, topLeft);
     }
 
+    public Hunter GetHunter() { return _hunter; }
+    public List<Boid> GetAllBoids() { return _allBoids; }
+    public List<GameObject> GetAllFood() { return _allFood; }
     public void AddBoid(Boid b)
     {
         if (!_allBoids.Contains(b))
             _allBoids.Add(b);
     }
-    public List<Boid> GetAllBoids()
+    public void RemoveFood(GameObject f)
     {
-        return _allBoids;
+        if (_allFood.Contains(f))
+            _allFood.Remove(f);
     }
 }

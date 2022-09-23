@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class Boid : MonoBehaviour
 {
-    [Header("Class")]
-    public float asd;
+    [Header("Classes")]
     BoidSteering _steering;
     BoidMovement _movement;
 
@@ -18,6 +17,12 @@ public class Boid : MonoBehaviour
 
     BoidAlignment _alignment;
     [SerializeField][Range(0f, 2f)] float _alignmentWeight = 1;
+
+    BoidArrive _arrive;
+    [SerializeField][Range(0f, 2f)] float _arriveWeight = 1;
+
+    BoidEvade _evade;
+    [SerializeField][Range(0f, 2f)] float _evadeWeight = 1;
 
     [Header("Variables")]
     [SerializeField] float _maxSpeed;
@@ -39,6 +44,8 @@ public class Boid : MonoBehaviour
         _separation = new BoidSeparation(this);
         _cohesion = new BoidCohesion(this);
         _alignment = new BoidAlignment(this);
+        _arrive = new BoidArrive(this);
+        _evade = new BoidEvade(this);
 
     }
 
@@ -49,6 +56,8 @@ public class Boid : MonoBehaviour
         _movement.AddForce(_separation.Separation() * _separationWeight);
         _movement.AddForce(_cohesion.Cohesion() * _cohesionWeight);
         _movement.AddForce(_alignment.Alignment() * _alignmentWeight);
+        _movement.AddForce(_arrive.Arrive() * _arriveWeight);
+        _movement.AddForce(_evade.Evade() * _evadeWeight);
         _movement.Movement();
     }
 
