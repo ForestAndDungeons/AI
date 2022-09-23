@@ -58,6 +58,7 @@ public class Boid : MonoBehaviour
         _movement.AddForce(_alignment.Alignment() * _alignmentWeight);
         _movement.AddForce(_arrive.Arrive() * _arriveWeight);
         _movement.AddForce(_evade.Evade() * _evadeWeight);
+
         _movement.Movement();
 
         if (Vector3.Distance(GameManager.Instance.GetHunter().transform.position, this.transform.position) <= 1)
