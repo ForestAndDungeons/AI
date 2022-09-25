@@ -96,8 +96,10 @@ public class GameManager : MonoBehaviour
     }
     public void RemoveBoid(Boid b)
     {
-        if (_allBoids.Contains(b))
+        if (_allBoids.Contains(b)) { 
             _allBoids.Remove(b);
+            _hunter.SetTarget(null);
+        }
     }
     public void RemoveFood(GameObject f)
     {

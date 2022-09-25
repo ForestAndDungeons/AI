@@ -5,11 +5,18 @@ using UnityEngine;
 public class HIdleState : IState
 {
     HunterSM _hunterSM;
-    float _hunterStamina;
-    public HIdleState(HunterSM hunterSM,float hunterStamina)
+    StaminaBar _staminaBar;
+    float _stamina;
+    float _restTimer;
+    float _hunterRestTime;
+
+    public HIdleState(HunterSM hunterSM,StaminaBar staminaBar,float stamina,float restTimer,float hunterRestTime)
     {
         _hunterSM = hunterSM;
-        _hunterStamina = hunterStamina;
+        _staminaBar = staminaBar;
+        _stamina = stamina;
+        _restTimer = restTimer;
+        _hunterRestTime = hunterRestTime; 
     }
 
     public void OnStart()
@@ -19,7 +26,24 @@ public class HIdleState : IState
 
     public void OnUpdate()
     {
+        _restTimer -= Time.deltaTime;
 
+        if (_restTimer <= 0.0f)
+        {
+            OnRest();
+            _restTimer = _hunterRestTime;
+        }
+
+        if (_staminaBar.currentStamina >= _staminaBar.maxStamina)
+        {
+            _hunterSM.ChangeState(HunterState.HunterPatrol);
+        }
+    }
+
+    void OnRest()
+    {
+        Debug.Log("estoy descansando");
+        _staminaBar.AddStamina(_stamina*20);
     }
 
     public void OnExit()
