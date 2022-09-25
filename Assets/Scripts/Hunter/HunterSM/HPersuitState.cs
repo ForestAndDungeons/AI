@@ -5,22 +5,24 @@ using UnityEngine;
 public class HPersuitState : IState
 {
     HunterSM _hunterSM;
-    float _hunterStamina;
     Vector3 _hunterVelocity;
     float _maxSpeed;
     float _maxForce;
     Hunter _hunter;
     float _hunterView;
+    StaminaBar _staminaBar;
+    float _stamina;
 
-    public HPersuitState(HunterSM hunterSM,float hunterStamina, Vector3 hunterVelocity, float maxSpeed, Hunter hunter,float maxForce,float hunterView)
+    public HPersuitState(HunterSM hunterSM, Vector3 hunterVelocity, float maxSpeed, Hunter hunter,float maxForce,float hunterView, StaminaBar staminaBar,float stamina)
     {
         _hunterSM = hunterSM;
-        _hunterStamina = hunterStamina;
         _hunterVelocity = hunterVelocity;
         _maxSpeed = maxSpeed;
         _hunter = hunter;
         _maxForce = maxForce;
         _hunterView = hunterView;
+        _staminaBar = staminaBar;
+        _stamina = stamina;
     }
 
     public void OnStart()
@@ -31,19 +33,26 @@ public class HPersuitState : IState
     public void OnUpdate()
     {
 
-        if (_hunter.GetTarget()!=null)
+        if (_staminaBar.currentStamina <= 0)
         {
-            AddForce(Persuit(_hunter.GetTarget()));
-
-            if (Vector3.Distance(_hunter.GetTarget().transform.position, _hunter.transform.position) > _hunterView)
-            {
-                    _hunter.SetTarget(null);
-                    _hunterSM.ChangeState(HunterState.HunterPatrol);
-            }
+            _hunterSM.ChangeState(HunterState.HunterIdle);
         }
+        else
+        {
+            if (_hunter.GetTarget()!=null)
+            {
+                AddForce(Persuit(_hunter.GetTarget()));
 
-        _hunter.transform.position +=_hunterVelocity * Time.deltaTime;
-        _hunter.transform.forward = _hunterVelocity;
+                if (Vector3.Distance(_hunter.GetTarget().transform.position, _hunter.transform.position) > _hunterView)
+                {
+                        _hunter.SetTarget(null);
+                        _hunterSM.ChangeState(HunterState.HunterPatrol);
+                }
+            }
+
+            _hunter.transform.position +=_hunterVelocity * Time.deltaTime;
+            _hunter.transform.forward = _hunterVelocity;
+        }
     }
 
     public void OnExit()
@@ -65,6 +74,7 @@ public class HPersuitState : IState
         desired*=_maxSpeed;
         Vector3 steering = desired - _hunterVelocity;
         steering = Vector3.ClampMagnitude(steering, _maxForce);
+        _staminaBar.UseStamina(_stamina);
         return steering;
     }
 }
