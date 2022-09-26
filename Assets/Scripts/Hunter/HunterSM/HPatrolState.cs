@@ -73,6 +73,6 @@ public class HPatrolState : IState
                 _currentWaypoint = 0;
             }
         }
-        _staminaBar.UseStamina(_stamina * 1.5f);
+        _staminaBar.UseStamina(_stamina);
     }
 }

@@ -49,6 +49,10 @@ public class HPersuitState : IState
                         _hunterSM.ChangeState(HunterState.HunterPatrol);
                 }
             }
+            else
+            {
+                _hunterSM.ChangeState(HunterState.HunterPatrol);
+            }
 
             _hunter.transform.position +=_hunterVelocity * Time.deltaTime;
             _hunter.transform.forward = _hunterVelocity;
@@ -74,7 +78,7 @@ public class HPersuitState : IState
         desired*=_maxSpeed;
         Vector3 steering = desired - _hunterVelocity;
         steering = Vector3.ClampMagnitude(steering, _maxForce);
-        _staminaBar.UseStamina(_stamina);
+        _staminaBar.UseStamina(_stamina * 1.5f);
         return steering;
     }
 }

@@ -26,13 +26,13 @@ public class HIdleState : IState
 
     public void OnUpdate()
     {
-        _restTimer -= Time.deltaTime;
+       /* _restTimer -= Time.deltaTime;
 
         if (_restTimer <= 0.0f)
         {
-            OnRest();
             _restTimer = _hunterRestTime;
-        }
+        */
+            OnRest();
 
         if (_staminaBar.currentStamina >= _staminaBar.maxStamina)
         {
@@ -43,7 +43,7 @@ public class HIdleState : IState
     void OnRest()
     {
         Debug.Log("estoy descansando");
-        _staminaBar.AddStamina(_stamina*20);
+        _staminaBar.AddStamina(_stamina*2);
     }
 
     public void OnExit()
