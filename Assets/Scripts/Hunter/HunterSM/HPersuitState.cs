@@ -11,9 +11,9 @@ public class HPersuitState : IState
     Hunter _hunter;
     float _hunterView;
     StaminaBar _staminaBar;
-    float _stamina;
+    float _persuitStamina;
 
-    public HPersuitState(HunterSM hunterSM, Vector3 hunterVelocity, float maxSpeed, Hunter hunter,float maxForce,float hunterView, StaminaBar staminaBar,float stamina)
+    public HPersuitState(HunterSM hunterSM, Vector3 hunterVelocity, float maxSpeed, Hunter hunter,float maxForce,float hunterView, StaminaBar staminaBar,float persuitStamina)
     {
         _hunterSM = hunterSM;
         _hunterVelocity = hunterVelocity;
@@ -22,7 +22,7 @@ public class HPersuitState : IState
         _maxForce = maxForce;
         _hunterView = hunterView;
         _staminaBar = staminaBar;
-        _stamina = stamina;
+        _persuitStamina = persuitStamina;
     }
 
     public void OnStart()
@@ -61,7 +61,7 @@ public class HPersuitState : IState
 
     public void OnExit()
     {
-
+        Debug.Log("Persuit Exit");
     }
 
     void AddForce(Vector3 force)
@@ -78,7 +78,7 @@ public class HPersuitState : IState
         desired*=_maxSpeed;
         Vector3 steering = desired - _hunterVelocity;
         steering = Vector3.ClampMagnitude(steering, _maxForce);
-        _staminaBar.UseStamina(_stamina * 1.5f);
+        _staminaBar.UseStamina(_persuitStamina);
         return steering;
     }
 }
