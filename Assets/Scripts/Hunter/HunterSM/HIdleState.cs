@@ -6,17 +6,13 @@ public class HIdleState : IState
 {
     HunterSM _hunterSM;
     StaminaBar _staminaBar;
-    float _stamina;
-    float _restTimer;
-    float _hunterRestTime;
+    float _restStamina;
 
-    public HIdleState(HunterSM hunterSM,StaminaBar staminaBar,float stamina,float restTimer,float hunterRestTime)
+    public HIdleState(HunterSM hunterSM,StaminaBar staminaBar,float restStamina)
     {
         _hunterSM = hunterSM;
         _staminaBar = staminaBar;
-        _stamina = stamina;
-        _restTimer = restTimer;
-        _hunterRestTime = hunterRestTime; 
+        _restStamina = restStamina;
     }
 
     public void OnStart()
@@ -26,28 +22,20 @@ public class HIdleState : IState
 
     public void OnUpdate()
     {
-       /* _restTimer -= Time.deltaTime;
-
-        if (_restTimer <= 0.0f)
-        {
-            _restTimer = _hunterRestTime;
-        */
-            OnRest();
-
         if (_staminaBar.currentStamina >= _staminaBar.maxStamina)
         {
             _hunterSM.ChangeState(HunterState.HunterPatrol);
         }
+        OnRest();
     }
 
     void OnRest()
     {
-        Debug.Log("estoy descansando");
-        _staminaBar.AddStamina(_stamina*2);
+        _staminaBar.AddStamina(_restStamina);
     }
 
     public void OnExit()
     {
-
+        Debug.Log("Rest Exit");
     }
 }

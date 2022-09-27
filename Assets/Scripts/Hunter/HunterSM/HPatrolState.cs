@@ -5,23 +5,21 @@ using UnityEngine;
 public class HPatrolState : IState
 {
     HunterSM _hunterSM;
-    GameObject[] _hunterWaypoints;
     int _currentWaypoint;
     float _hunterSpeed;
     float _hunterView;
     Hunter _hunter;
     StaminaBar _staminaBar;
-    float _stamina;
-    public HPatrolState(HunterSM hunterSM, GameObject[] hunterWaypoints, int currentWaypoint, float hunterSpeed, float hunterView, Hunter hunter, StaminaBar staminaBar,float stamina)
+    float _patrolStamina;
+    public HPatrolState(HunterSM hunterSM,  int currentWaypoint, float hunterSpeed, float hunterView, Hunter hunter, StaminaBar staminaBar,float patrolStamina)
     {
         _hunterSM = hunterSM;
-        _hunterWaypoints = hunterWaypoints;
         _currentWaypoint = currentWaypoint;
         _hunterSpeed = hunterSpeed;
         _hunterView = hunterView;
         _hunter = hunter;
         _staminaBar = staminaBar;
-        _stamina = stamina;
+        _patrolStamina = patrolStamina;
     }
 
     public void OnStart()
@@ -54,25 +52,25 @@ public class HPatrolState : IState
 
     public void OnExit()
     {
-
+        Debug.Log("Patrol Exit");
     }
 
     void Patrol()
     {
-        Debug.Log("CurrentWaypoint: " + _currentWaypoint);
-        var currWaypoint = _hunterWaypoints[_currentWaypoint];
-        Debug.Log(currWaypoint);
+        var waypointList = GameManager.Instance.GetAllWaypoints();
+        var currWaypoint = waypointList[_currentWaypoint];
         Vector3 hunterDir = currWaypoint.transform.position - _hunter.transform.position;
         _hunter.transform.forward = hunterDir;
         _hunter.transform.position += _hunter.transform.forward * _hunterSpeed * Time.deltaTime;
         if (hunterDir.magnitude <=0.2f)
         {
             _currentWaypoint++;
-            if (_currentWaypoint > _hunterWaypoints.Length -1)
+            GameManager.Instance.RemoveWaypoint(waypointList[_currentWaypoint - 1]);
+            if (_currentWaypoint > waypointList.Count -1) 
             {
                 _currentWaypoint = 0;
             }
         }
-        _staminaBar.UseStamina(_stamina);
+        _staminaBar.UseStamina(_patrolStamina);
     }
 }
