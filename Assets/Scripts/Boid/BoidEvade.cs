@@ -20,11 +20,12 @@ public class BoidEvade
     public Vector3 Evade()
     {
         Vector3 desired = Vector3.zero;
-        Transform hunter = GameManager.Instance.GetHunter().transform;
+        Hunter hunter = GameManager.Instance.GetHunter();
+        Vector3 futurePos = hunter.transform.position + hunter.GetVelocity() * Time.deltaTime;
         
-        if (Vector3.Distance(hunter.position, _myTransform.position) <= _viewRadius)
+        if (Vector3.Distance(futurePos, _myTransform.position) <= _viewRadius)
         {
-            desired = hunter.transform.position - _myTransform.position;
+            desired = futurePos - _myTransform.position;
         }
         return _steering.CalculateSteering(-desired);
     }

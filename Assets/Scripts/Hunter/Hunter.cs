@@ -59,4 +59,9 @@ public class Hunter : MonoBehaviour
     {
         _target = target;
     }
+
+    public Vector3 GetVelocity()
+    {
+        return _hunterVelocity;
+    }
 }

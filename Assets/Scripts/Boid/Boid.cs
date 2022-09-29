@@ -56,12 +56,13 @@ public class Boid : MonoBehaviour
         _movement.AddForce(_separation.Separation() * _separationWeight);
         _movement.AddForce(_cohesion.Cohesion() * _cohesionWeight);
         _movement.AddForce(_alignment.Alignment() * _alignmentWeight);
-        _movement.AddForce(_arrive.Arrive() * _arriveWeight);
+
         _movement.AddForce(_evade.Evade() * _evadeWeight);
+        _movement.AddForce(_arrive.Arrive() * _arriveWeight);
 
         _movement.Movement();
 
-        if (Vector3.Distance(GameManager.Instance.GetHunter().transform.position, this.transform.position) <= 1)
+        if (Vector3.Distance(GameManager.Instance.GetHunter().transform.position, this.transform.position) <= 0.5f)
         {
             GameManager.Instance.RemoveBoid(this);
             Destroy(this.gameObject);
@@ -70,11 +71,11 @@ public class Boid : MonoBehaviour
 
     void OnDrawGizmos()
     {
-        Gizmos.color = _separationColor;
-        Gizmos.DrawWireSphere(transform.position, _separationRadius);
-
         Gizmos.color = _viewColor;
         Gizmos.DrawWireSphere(transform.position, _viewRadius);
+
+        Gizmos.color = _separationColor;
+        Gizmos.DrawWireSphere(transform.position, _separationRadius);
     }
 
     public BoidSteering GetSteering() { return _steering; }
